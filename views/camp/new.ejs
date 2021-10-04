@@ -1,0 +1,72 @@
+<% layout('layouts/boilerplate') %> 
+<!-- means layout body -->
+
+<div class="row">
+    <h1 class="text-center">New Campground</h1>
+    <div class="col-md-6 offset-md-3">
+
+        <!-- make the all the things center -->
+       
+        <form action="/campground" method='POST' novalidate class="validated-form" enctype="multipart/form-data" id="campgroundEditForm">
+            <div class="mb-3">
+                <label class ="form-label" for="title">Title</label>
+                <input class="form-control" type="text"name='campground[title]' id="title" required>
+                <div class="valid-feedback">looks good!</div>
+            </div>
+        <div class="mb-3">
+            <label class ="form-label" for="location">Location</label>
+            <input class="form-control" type="text"name='campground[location]' id="location" required> 
+            <div class="valid-feedback">looks good!</div>
+        </div>
+        <!-- <div class="mb-3">
+            <label class ="form-label" for="image">Image URL</label>
+            <input class="form-control" type="text"name='campground[image]' id="image" required> 
+            <div class="valid-feedback">looks good!</div>
+        </div> -->
+        <div class="mb-3">
+            <label for="formFileMultiple" class="form-label">images</label>
+            <input class="form-control imageUploads" type="file" id="image" name ='image' multiple required>
+            <div class="invalid-feedback">
+                This campground would look much better with a picture.
+            </div>
+          </div>
+      
+<div class="mb-3">
+    <label for="price"class ="form-label">Campground Price</label>
+    <div class="input-group">
+        <span class="input-group-text" id="price-label">$</span>
+        <input type="text" class="form-control" id="price"  name='campground[price]' aria-label="price" aria-describedby="price-label" placeholder="0.00" required>
+        <div class="valid-feedback">looks good!</div>
+      </div>
+</div>
+    <div class="mb-3">
+        <label class ="form-label" for="description">Description</label>
+        <textarea class="form-control" name="campground[description]" id="description" cols="30" rows="10" required></textarea>
+        <div class="valid-feedback">looks good!</div>
+    </div>
+       <div class="mb-3">
+        <button class="btn btn-dark">Let's go</button>
+       </div>
+      <a href="/campground">All campgrounds</a>
+        </form>
+    </div>
+
+</div>
+ 
+
+
+<script>
+    let campgroundEditForm = document.getElementById('campgroundEditForm')
+    //checking for number of images uploading deleting
+    campgroundEditForm.addEventListener('submit',function (event){
+        let imageUploads = document.querySelector('.imageUploads').files.length;
+        if(imageUploads > 6)
+        {
+            event.preventDefault();
+            return alert('Sorry, You only can upload maximum 6 images');
+        }
+    })
+   
+</script>
+
+ 

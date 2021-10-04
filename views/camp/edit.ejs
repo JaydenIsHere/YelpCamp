@@ -1,0 +1,89 @@
+<% layout('layouts/boilerplate') %> 
+<!-- means layout body -->
+
+    <div class="row">
+        <h1 class="text-center">Edit Campground</h1>
+        <div class="col-md-6 offset-md-3">
+            <!-- make the all the things center -->
+           
+            <form action="/campground/<%=campgrounds._id %>?_method=PUT" method='POST' novalidate class="validated-form" enctype="multipart/form-data" id="campgroundEditForm">
+                <div class="mb-3">
+                    <label class ="form-label" for="title">Title</label>
+                    <input class="form-control" type="text"name='campground[title]' id="title" value="<%=campgrounds.title %>" required>
+            <div class="valid-feedback">looks good</div>
+                </div>
+            <div class="mb-3">
+                <label class ="form-label" for="location">Location</label>
+                <input class="form-control" type="text"name='campground[location]' id="location" value="<%=campgrounds.location %>" required> 
+            <div class="valid-feedback">looks good</div>
+            </div>
+            
+    <div class="mb-3">
+        <label for="price"class ="form-label">Campground Price</label>
+        <div class="input-group">
+            <span class="input-group-text" id="price-label">&</span>
+            <input type="text" class="form-control" id="price"  name='campground[price]' aria-label="price" aria-describedby="price-label" placeholder="0.00"value="<%=campgrounds.price %>" required>
+        <div class="valid-feedback">looks good</div>
+          </div>
+    </div>
+        <div class="mb-3">
+            <label class ="form-label" for="description">Description</label>
+            <textarea value="<%=campgrounds.description %>" class="form-control" name="campground[description]" id="description" cols="30" rows="10" required ></textarea>
+            <div class="valid-feedback">looks good</div> 
+
+            <div class="mb-3">
+                <label for="formFileMultiple" class="form-label">Update images</label>
+                <input class="form-control imageUploads" type="file" id="image" name ='image'multiple >
+                <!-- <div class="invalid-feedback">
+                    This campground would look much better with a picture.
+                </div> -->
+              </div>
+              <h4>Delete Images</h4>
+              <div class="row row-cols-1 row-cols-md-4 g-4 mb-3">
+                  <%campgrounds.images.forEach(function (imgs,i){  %>
+                    <div class="col">
+                        <div class="card">
+                    <img src="<%= imgs.thumbnail %>" alt="" class="card-img">
+                    
+                    <div  class="card-img-overlay text-end pt-1 pe-2">
+                        <label class="visually-hidden" for="image-<%=i%>">Delete Image</label>
+                        <input type="checkbox" id ="image-<%=i%>" name="deleteImage[]" value="<%=imgs.filename%>" class="existingImgs form-check-input">
+                        
+                    </div>
+                </div>
+            </div>
+
+
+                    <% }) %>  
+              </div>
+        </div>
+           <div class="mb-3">
+            <button class="btn btn-dark">Update</button>
+           </div>
+          <a href="/campground">All campgrounds</a>
+            </form>
+        </div>
+    </div>
+
+    <script>
+            let campgroundEditForm = document.getElementById('campgroundEditForm')
+    //checking for number of images uploading deleting
+    campgroundEditForm.addEventListener('submit',function (event){
+        let imageUploads = document.querySelector('.imageUploads').files.length;
+        let existingImgs = document.querySelectorAll('existingImgs').length;
+        let imgDeletions= document.querySelectorAll('imgDeletions').length;
+        let newTotal = existingImgs - imgDeletions +imageUploads;
+        if(newTotal > 6)
+        {
+            event.preventDefault();
+            return alert('Sorry! Only 6 images per campground are allowed')
+        }
+    })
+
+    for(let i = 0; i < imageUploads.files; i++){
+      if(imageUploads.files[i].type !== 'image/jpeg' || imageUploads.files[i].type !== 'image/jpg' || imageUploads.files[i].type !== 'image/png' || imageUploads.files[i].type !== '' ){
+        event.preventDefault();
+        return alert('Only JPEG, JPG and PNG File Types Accepted to Uplaod images');
+      }
+    } 
+    </script>
