@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;//shortcut.we're actually going to be referencing Mongoose, that schema quite a bit.Once we get to relationships, we'll do things like this Momgoose dot schema, dot types, dot something
 const Review= require('./review')
+const {cloudinary} = require('../cloudinary');
 const opts = { toJSON: { virtuals: true } };
 const ImageSchema = new Schema({
     url:String,
@@ -46,14 +47,21 @@ campGroundSchema.virtual('properties.popUpMarkup').get(function (){//virtual is 
 
 
 //when I delete a campground this middleware will then delete all the related reviews  
-campGroundSchema.post('findOneAndDelete' , async function(doc){//This is query middleware
+campGroundSchema.post('findOneAndDelete' , async function(campground){//This is query middleware
     //In the route if used the removed method or delete many, well, that is not going to trigger this middleware.
-    if(doc){//
+    if(campground.reviews){//
 await Review.deleteMany({
-    _id:{//in the particular -id
-       $in:doc.reviews
-    }
-})
+    _id:{
+       $in:campground.reviews
+    }})
+}
+    if(campground.images)
+    {  
+        for(const img of campground.images)
+        {
+            await cloudinary.uploader.destroy(img.filename);
+        }
     }
 })
 module.exports = mongoose.model('Campground',campGroundSchema)//exports model
+

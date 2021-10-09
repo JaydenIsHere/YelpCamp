@@ -7,7 +7,7 @@ module.exports.isLoggedIn = (req,res,next) =>{//it's middleware function
     if(!req.isAuthenticated())
     {   
         req.flash('error','You must log in first')
-        return res.redirect('/login')//must return otherwise below code still run
+        return res.redirect('/user/login')//must return otherwise below code still run
     }
     else{
         next()

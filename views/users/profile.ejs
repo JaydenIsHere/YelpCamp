@@ -1,0 +1,45 @@
+<% layout('layouts/boilerplate')  %> <!-- means here is layout body -->
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <h1>My Profile</h1>
+            <div class="mb-3">
+            <% if(thisUser.image.length > 0) {%> 
+                <img  class="d-block w-100" src='<%=thisUser.image[0].url %>'alt="">
+             <% }else{ %>
+                <img  class="d-block w-50" src='https://res.cloudinary.com/dg4qomfkb/image/upload/v1633601135/YelpCamp/upload-g61b1f7707_1280_hkxep6.png'  alt="">
+                <% } %> 
+                
+                <label for="formFileMultiple" class="form-label"></label>
+                <form action="/user/<%=thisUser._id%>" method='POST' novalidate class="validated-form" enctype="multipart/form-data" id="campgroundEditForm">
+                <input class="form-control imageUploads" type="file" id="profile" name ='profile' multiple  required>
+                <button class='btn btn-success'>upload</button>
+                </form>
+              </div>
+            <ul class="list-group mt-5 mb-5">
+                <li class="list-group-item">Username: <%=thisUser.username%>  </li>
+               <li class="list-group-item">Email: <%=thisUser.email%> </li>
+              </ul>
+              <form class ="d-inline" action="/user/<%=thisUser._id %>/update" method='GET'>
+                <button class='btn btn-success'>Update Profile</button>
+              </form>
+
+              <form class ="d-inline" action="/user/<%=thisUser._id %>?_method=DELETE" method='POST'>
+              <button class='btn btn-danger'>Delete account</button>
+            </form>
+        </div>
+        <div class="col-md-6 ">
+          <h1>All my campgrounds</h1>
+          <% for(let camp of campgrounds){ %> 
+          <div class="card ms-5 mb-3" style="width: 15rem;" >
+            <img class="card-img" src=" <%=camp.images[0].url%>  " alt="" style="max-width:15rem;">
+            <div class="card-body">
+              <p class="card-text">title:<a href="/campground/<%=camp._id%>"><%=camp.title%></a></p> 
+              <p class="card-text" >descripttion: <%=camp.description%></p>
+             
+            </div>
+          </div>
+          <% } %> 
+        </div>
+    </div>
+

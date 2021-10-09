@@ -27,8 +27,8 @@ const helmet = require('helmet')
 const MongoStore = require('connect-mongo');
 
 
-// const db_Url = process.env.DB_URL;
 const db_Url = process.env.DB_URL || 'mongodb://localhost:27017/yelpCamp';
+// const db_Url = 'mongodb://localhost:27017/yelpCamp';
 mongoose.connect(db_Url, { useNewUrlParser: true, useUnifiedTopology: true})
 const db =mongoose.connection;
 db.on("error",console.error.bind(console,"connection error:"));
@@ -38,7 +38,8 @@ console.log("Database connected");
 
 const mySecret = process.env.SECRET || 'thisismysecret';
 
-const store = MongoStore.create({
+ //------only for production------------
+const store = MongoStore.create({//store session in the atlas cloud database
     mongoUrl:db_Url,
     touchAfter:24*60*60,
     crypto:{
@@ -48,9 +49,12 @@ const store = MongoStore.create({
 store.on('error', function(e){//show store error
 console.log('Session Store Error',e)
 })
+// //------only for production------------
+
 const app = express();
 const sessionconfig ={//pass in some configuration object
     store:store,
+    //store only for production
     name:'session',
     secret:mySecret,
     resave:false,
@@ -132,7 +136,7 @@ passport.deserializeUser(User.deserializeUser())//get userID out of the session
 
 app.use ((req,res,next) =>{//a middleware accept every requiest
    
-if(!['/login','/'].includes(req.originalUrl))
+if(!['/user/login','/'].includes(req.originalUrl))
 {
     req.session.returnTo = req.originalUrl//redirect user to wherever they were
 }
@@ -141,17 +145,20 @@ if(!['/login','/'].includes(req.originalUrl))
     res.locals.warning =req.flash('warning')
     res.locals.error = req.flash('error')
     res.locals.currentUser = req.user;//currentUser is a variable created by us,can be access on every request, req.user is from passport that it shows the register user inform
-        next()
+        next();
     })
 
 app.use('/campground',campgroundRoute)//campground router
 app.use('/campground/:id/reviews',reviewRoute)//review router
-app.use('/',userRoute)
+app.use('/user',userRoute)
 
 app.get('/' , (req, res) =>{
     res.render('home')
 });
-
+//----------forgot password form
+app.get('/forgot',(req,res) =>{
+    res.render('users/forgotpw')
+});
 
 app.all('*',(req,res,next) =>{
  next(new ExpressError('Page not found',404));

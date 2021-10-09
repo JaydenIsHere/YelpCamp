@@ -1,0 +1,16 @@
+<% layout('layouts/boilerplate')  %> <!-- means here is layout body -->
+<div class="row">
+  <div class="col-md-6 offset-md-3">
+<form action="/user/resetpassword/<%=token%>" method="POST">
+  <div class="mb-3">
+    <label for="password" class="form-label">New password</label>
+    <input type="text" class="form-control" id="password" placeholder="New password" name='password'>
+  </div>
+  <div class="mb-3">
+    <label for="confirm" class="form-label">Confirmed password</label>
+    <input type="text" class="form-control" id="confirm" placeholder="Confirmed password"name='confirm'>
+  </div>
+  <button class="btn btn-success">Update password</button>
+</form>
+  </div>
+</div>

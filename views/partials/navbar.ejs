@@ -13,10 +13,16 @@
         <!-- margin left = ms-auto -->
         <div class="navbar-nav ms-auto">
           <% if(!currentUser) {%> <!-- the currentUser is from req.locals.currentUser -->
-          <a class="nav-link"  href="/login">login</a>
-          <a class="nav-link" href="/register">Register</a>
+          <a class="nav-link"  href="/user/login">login</a>
+          <a class="nav-link" href="/user/register">Register</a>
           <% }  else {%> 
-          <a class="nav-link" href="/logout">Logout</a>
+          <a class="nav-link" href="/user/logout">Logout</a>
+          <a class="nav-link" href="/user/<%=currentUser._id%> ">Profile</a>
+
+        
+          <!-- <form class ="d-inline"action="/campground/user/delete?_method=DELETE" method='POST'>
+            <button class="btn btn-danger">Delete Account</button>
+          </form> -->
           <% } %> 
         </div>
       </div>

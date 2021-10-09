@@ -1,0 +1,18 @@
+<% layout('layouts/boilerplate')  %> <!-- means here is layout body -->
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <h1>Update my Profile detail</h1>
+        <form action="/user/<%=thisUser._id%>?_method=PUT" method='POST' novalidate class="validated-form" id="campgroundEditForm">
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" placeholder="update username" name="username"value="<%=thisUser.username%>">
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="email" placeholder="name@example.com"name="email"value="<%=thisUser.email%>">
+          </div>
+          <button class="btn btn-success">Update</button>
+        </form>
+          <a href="/user/<%=thisUser._id%>/passwordreset">Update Password</a>
+    </div>
+</div>
