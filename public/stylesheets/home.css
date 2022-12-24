@@ -40,6 +40,9 @@ body {
   .btn {
     font-size: 18px;
   }
+  .cover-container {
+    max-width: 70vw;
+}
 }
 
 @media only screen and (max-width: 375px) {
